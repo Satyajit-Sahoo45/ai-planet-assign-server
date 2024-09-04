@@ -57,7 +57,6 @@ const updateHackathon = async (req, res) => {
         if (image) {
             try {
                 await cloudinary.v2.uploader.destroy(image.public_id);
-                console.log("delted ")
                 const myCloud = await cloudinary.v2.uploader.upload(image.url, {
                     folder: "courses",
                 });
