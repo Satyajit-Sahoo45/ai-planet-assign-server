@@ -10,14 +10,14 @@ courseRouter.post(
     authorizeRoles("ADMIN"),
     createHackathon);
 
-courseRouter.post(
+courseRouter.put(
     '/update-hackathon',
     isAuthenticated,
     authorizeRoles("ADMIN"),
     updateHackathon
 );
 
-courseRouter.post(
+courseRouter.delete(
     '/delete-hackathon',
     isAuthenticated,
     authorizeRoles("ADMIN"),
