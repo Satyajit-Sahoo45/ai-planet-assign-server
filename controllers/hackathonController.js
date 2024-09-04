@@ -54,6 +54,8 @@ const updateHackathon = async (req, res) => {
 
         let thumb = null;
 
+        console.log(image, "imageimageimage")
+
         if (image) {
             try {
                 await cloudinary.v2.uploader.destroy(image.public_id);
@@ -80,7 +82,7 @@ const updateHackathon = async (req, res) => {
                 startDate,
                 endDate,
                 description,
-                image,
+                image: thumb,
                 level
             }
         });
