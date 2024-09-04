@@ -32,7 +32,7 @@ const createHackathon = async (req, res) => {
                 startDate,
                 endDate,
                 description,
-                thumb,
+                image: thumb,
                 level,
                 organizer: { connect: { id: organizerId } }
             }
