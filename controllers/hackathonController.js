@@ -7,15 +7,18 @@ const createHackathon = async (req, res) => {
     try {
         const { name, startDate, endDate, description, image, level, organizerId } = req.body;
         if (image) {
+            let thumb = {};
             try {
                 const myCloud = await cloudinary.v2.uploader.upload(image, {
                     folder: "courses",
                 });
 
-                image = {
+                thumb = {
                     public_id: myCloud.public_id,
                     url: myCloud.secure_url,
                 };
+
+                console.log(thumb, "uploaded image")
 
             } catch (error) {
                 console.log(error)
@@ -27,7 +30,7 @@ const createHackathon = async (req, res) => {
                 startDate,
                 endDate,
                 description,
-                image,
+                thumb,
                 level,
                 organizer: { connect: { id: organizerId } }
             }
