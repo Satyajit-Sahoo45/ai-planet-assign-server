@@ -6,8 +6,10 @@ const cloudinary = require("cloudinary");
 const createHackathon = async (req, res) => {
     try {
         const { name, startDate, endDate, description, image, level, organizerId } = req.body;
+
+        let thumb = null;
+
         if (image) {
-            let thumb = {};
             try {
                 const myCloud = await cloudinary.v2.uploader.upload(image, {
                     folder: "courses",
@@ -18,12 +20,12 @@ const createHackathon = async (req, res) => {
                     url: myCloud.secure_url,
                 };
 
-                console.log(thumb, "uploaded image")
-
             } catch (error) {
-                console.log(error)
+                console.error("Error uploading image:", error);
+                return res.status(500).json({ error: "Image upload failed" });
             }
         }
+
         const hackathon = await prisma.hackathon.create({
             data: {
                 name,
@@ -35,11 +37,14 @@ const createHackathon = async (req, res) => {
                 organizer: { connect: { id: organizerId } }
             }
         });
+
         res.status(201).json(hackathon);
     } catch (error) {
+        console.error("Error creating hackathon:", error);
         res.status(500).json({ error: error.message });
     }
 };
+
 
 // Update Hackathon
 const updateHackathon = async (req, res) => {
