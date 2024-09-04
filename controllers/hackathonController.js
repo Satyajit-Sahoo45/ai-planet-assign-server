@@ -132,7 +132,7 @@ const getHackathonById = async (req, res) => {
         const { id } = req.params;
         const hackathon = await prisma.hackathon.findUnique({
             where: { id: parseInt(id) },
-            include: { organizer: true, level: true }
+            include: { organizer: true }
         });
 
         if (!hackathon) {
