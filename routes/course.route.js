@@ -18,7 +18,7 @@ courseRouter.put(
 );
 
 courseRouter.delete(
-    '/delete-hackathon',
+    '/delete-hackathon/:id',
     isAuthenticated,
     authorizeRoles("ADMIN"),
     deleteHackathon

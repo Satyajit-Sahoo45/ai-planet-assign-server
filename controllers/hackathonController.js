@@ -50,12 +50,9 @@ const createHackathon = async (req, res) => {
 const updateHackathon = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(req.body, " req.body req.body req.body")
         const { name, startDate, endDate, description, image, level } = req.body;
 
         let thumb = null;
-
-        console.log(image, "imageimageimage")
 
         if (image) {
             try {
