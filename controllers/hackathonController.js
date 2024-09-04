@@ -52,16 +52,25 @@ const updateHackathon = async (req, res) => {
         const { id } = req.params;
         const { name, startDate, endDate, description, image, level } = req.body;
 
-        if (image) {
-            await cloudinary.v2.uploader.destroy(image.public_id);
-            const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
-                folder: "courses",
-            });
+        let thumb = null;
 
-            data.thumbnail = {
-                public_id: myCloud.public_id,
-                url: myCloud.url,
-            };
+        if (image) {
+            try {
+                await cloudinary.v2.uploader.destroy(image.public_id);
+                console.log("delted ")
+                const myCloud = await cloudinary.v2.uploader.upload(image.url, {
+                    folder: "courses",
+                });
+
+                thumb = {
+                    public_id: myCloud.public_id,
+                    url: myCloud.secure_url,
+                };
+
+            } catch (error) {
+                console.error("Error uploading image:", error);
+                return res.status(500).json({ error: "Image upload failed" });
+            }
         }
 
         const hackathon = await prisma.hackathon.update({
@@ -123,6 +132,7 @@ const getHackathonById = async (req, res) => {
         const { id } = req.params;
         const hackathon = await prisma.hackathon.findUnique({
             where: { id: parseInt(id) },
+            include: { organizer: true, level: true }
         });
 
         if (!hackathon) {
