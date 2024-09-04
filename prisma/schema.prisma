@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int          @id @default(autoincrement())
+  username     String       @unique
+  email        String       @unique
+  password     String
+  role         Role         @default(USER)
+  hackathons   Hackathon[]  @relation("UserHackathons")
+  registrations Registration[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model Hackathon {
+  id           Int          @id @default(autoincrement())
+  name         String
+  startDate    DateTime
+  endDate      DateTime
+  description  String
+  image        Json?
+  level        Level
+  organizerId  Int
+  organizer    User         @relation("UserHackathons", fields: [organizerId], references: [id])
+  registrations Registration[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model Registration {
+  id           Int        @id @default(autoincrement())
+  userId       Int
+  hackathonId  Int
+  user         User       @relation(fields: [userId], references: [id])
+  hackathon    Hackathon  @relation(fields: [hackathonId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([userId, hackathonId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Level {
+  EASY
+  MEDIUM
+  HARD
+}
