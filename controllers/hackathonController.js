@@ -51,6 +51,19 @@ const updateHackathon = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, startDate, endDate, description, image, level } = req.body;
+
+        if (image) {
+            await cloudinary.v2.uploader.destroy(image.public_id);
+            const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
+                folder: "courses",
+            });
+
+            data.thumbnail = {
+                public_id: myCloud.public_id,
+                url: myCloud.url,
+            };
+        }
+
         const hackathon = await prisma.hackathon.update({
             where: { id: parseInt(id) },
             data: {
@@ -105,9 +118,27 @@ const getHackathons = async (req, res) => {
     }
 }
 
+const getHackathonById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const hackathon = await prisma.hackathon.findUnique({
+            where: { id: parseInt(id) },
+        });
+
+        if (!hackathon) {
+            return res.status(404).json({ error: 'Hackathon not found' });
+        }
+
+        res.json(hackathon);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     createHackathon,
     updateHackathon,
     deleteHackathon,
-    getHackathons
+    getHackathons,
+    getHackathonById
 };

@@ -1,5 +1,5 @@
 const express = require('express');
-const { createHackathon, updateHackathon, deleteHackathon, getHackathons } = require('../controllers/hackathonController');
+const { createHackathon, updateHackathon, deleteHackathon, getHackathons, getHackathonById } = require('../controllers/hackathonController');
 const { isAuthenticated, authorizeRoles } = require('../middleware/auth');
 
 const courseRouter = express.Router();
@@ -28,5 +28,7 @@ courseRouter.get(
     '/get-hackathon',
     getHackathons
 );
+
+courseRouter.get('/get-hackathon/:id', getHackathonById);
 
 module.exports = courseRouter;
