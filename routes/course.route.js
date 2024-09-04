@@ -11,7 +11,7 @@ courseRouter.post(
     createHackathon);
 
 courseRouter.put(
-    '/update-hackathon',
+    '/update-hackathon/:id',
     isAuthenticated,
     authorizeRoles("ADMIN"),
     updateHackathon
