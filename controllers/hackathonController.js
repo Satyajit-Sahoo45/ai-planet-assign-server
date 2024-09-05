@@ -2,7 +2,6 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const cloudinary = require("cloudinary");
 
-// Create Hackathon
 const createHackathon = async (req, res) => {
     try {
         const { name, startDate, endDate, description, image, level, organizerId } = req.body;
@@ -45,14 +44,10 @@ const createHackathon = async (req, res) => {
     }
 };
 
-
-// Update Hackathon
 const updateHackathon = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, startDate, endDate, description, image, level } = req.body;
-
-        console.log(image, "image----------=-=-=")
 
         let thumb = null;
 
@@ -91,7 +86,6 @@ const updateHackathon = async (req, res) => {
     }
 };
 
-// Delete Hackathon
 const deleteHackathon = async (req, res) => {
     try {
         const { id } = req.params;
