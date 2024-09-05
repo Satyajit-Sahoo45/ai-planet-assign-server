@@ -52,9 +52,11 @@ const updateHackathon = async (req, res) => {
         const { id } = req.params;
         const { name, startDate, endDate, description, image, level } = req.body;
 
+        console.log(image, "image----------=-=-=")
+
         let thumb = null;
 
-        if (image) {
+        if (image !== null && image && image.public_id && image.url) {
             try {
                 await cloudinary.v2.uploader.destroy(image.public_id);
                 const myCloud = await cloudinary.v2.uploader.upload(image.url, {
@@ -79,7 +81,7 @@ const updateHackathon = async (req, res) => {
                 startDate,
                 endDate,
                 description,
-                image: thumb,
+                ...(thumb && { image: thumb }),
                 level
             }
         });
