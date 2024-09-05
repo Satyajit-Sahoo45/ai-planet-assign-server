@@ -51,7 +51,7 @@ const updateHackathon = async (req, res) => {
 
         let thumb = null;
 
-        if (image !== null && image && image.public_id && image.url) {
+        if (image !== null && image && image.public_id && image.url && image.url.startsWith('data:image/')) {
             try {
                 await cloudinary.v2.uploader.destroy(image.public_id);
                 const myCloud = await cloudinary.v2.uploader.upload(image.url, {
